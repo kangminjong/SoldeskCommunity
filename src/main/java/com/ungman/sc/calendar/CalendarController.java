@@ -16,11 +16,19 @@ public class CalendarController {
 	
 	@Autowired
 	private UserService uDAO;
+	
+
+	
 	@GetMapping("/calendar.go")
 	public String calendarGo(HttpServletRequest req) {
 		req.setAttribute("menuPage", "menu");
+		
 		if(uDAO.islogin(req)) {
+			// 기존 캘린더 정보 가져오기
 			cDAO.calendarGo(req);
+			
+			// Google Calendar API 정보 추가
+			
 			
 			return "calendar/calendar";
 		}

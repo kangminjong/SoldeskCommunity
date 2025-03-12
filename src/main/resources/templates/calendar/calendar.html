@@ -39,12 +39,14 @@
 		</div>
 	</div>
 
-	<script type="text/javascript">
-		const CLIENT_ID = '1088184080364-mi9lsqv76kdteclb6dhu5qop8rtvv93q.apps.googleusercontent.com';
-		const API_KEY = 'AIzaSyCh1p1izwTFHla8Lmo3A0uG4hUGW0fyWkY';
+	<!-- Thymeleaf를 사용하여 서버에서 설정값 받기 -->
+	<script th:inline="javascript">
+		// Spring Boot 서버에서 제공하는 API 키와 클라이언트 ID
+		const CLIENT_ID = /*[[${googleClientId}]]*/ '';
+		const API_KEY = /*[[${googleApiKey}]]*/ '';
 		const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-		const SCOPES = 'https://www.googleapis.com/auth/calendar';
-		const DEFAULT_CALENDAR = 'https://calendar.google.com/calendar/embed?src=minjong2237%40gmail.com&ctz=Asia%2FSeoul';
+		const SCOPES = /*[[${googleScopes}]]*/ 'https://www.googleapis.com/auth/calendar';
+		const DEFAULT_CALENDAR = 'https://calendar.google.com/calendar/embed?ctz=Asia%2FSeoul';
 
 		let tokenClient;
 		let gapiInited = false;

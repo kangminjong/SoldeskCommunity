@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>투표 목록</title>
+<link rel="styleSheet" href="/css/index.css">
+<link rel="stylesheet" th:href="@{/css/vote.css}">
+</head>
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<h1>투표 목록</h1>
+	<table class="vote-table">
+		<thead>
+			<tr>
+				<th>투표 제목</th>
+				<th>시작일</th>
+				<th>종료일</th>
+				<th>상세 보기</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="vote : ${voteList}">
+				<td th:text="${vote.title}"></td>
+				<td th:text="${#dates.format(vote.startDate, 'yyyy-MM-dd')}"></td>
+				<td th:text="${#dates.format(vote.endDate, 'yyyy-MM-dd')}"></td>
+				<td><a class="plus"
+					th:href="@{/vote/{voteId}(voteId=${vote.voteId})}">상세보기</a></td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="/votecreate.go" class="vote-create-link">투표 생성</a>
+</body>
+</html>

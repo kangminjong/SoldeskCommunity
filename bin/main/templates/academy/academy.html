@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>회사 소개</title>
+<link rel="styleSheet" href="css/index.css">
+<link rel="styleSheet" href="css/academy.css">
+<style type="text/css">
+.header {
+	position: relative;
+	width: 100%;
+	height: 400px;
+	background: url('img/academy.jpg') center/cover no-repeat;
+	display: flex;
+	flex-direction: column; /* 요소들을 위에서 아래로 배치 */
+	align-items: center; /* 가로 중앙 정렬 */
+	justify-content: center; /* 세로 중앙 정렬 */
+	color: white;
+	text-align: center;
+	font-size: 25px;
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<div class="header">
+		<img class="logo" src="img/logo.png">
+		<div>회사와 연관된 최첨단 인공지능 교육기관</div>
+	</div>
+	<div class="nav-bar">회사 소개 | 교육철학 | 경영원칙 | 조직도 | 교사 소개</div>
+
+	<div class="soldesk">
+		<div class="section">
+			<h2>솔데스크 소개</h2>
+			<div class="flex-container">
+				<div class="image-container">
+					<img src="img/main1.jpg" alt="회사 사진">
+				</div>
+				<div class="text-container">
+					<div>
+						<p>
+							<span style="font-size: 14px; color: rgb(102, 102, 102);">복잡하고
+								다양한 현재를 살고 있는 우리들은 매일매일 새로운 문제가 봉착을 하게되어&nbsp;</span><span
+								style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);">그 문제를 해결하기 위한 다양한 결정을
+									하게 됩니다. 때로는 좋은결정, 때로는 실패하는 결정을 하기도 하지만 결정이 필요할 때 좋은결정, 좋은 답을
+									내기위한 현명한 지혜가 필요합니다.&nbsp;</span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);"><br></span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);">이러한 지혜가 필요한 시기에 약
+									3천여년전부터 현재까지 지혜의 현인이 많았지만&nbsp;그 중의 으뜸으로 치는사람은 중동 작은 나라의 왕인
+									솔로몬을 최고라 칭합니다.&nbsp;솔데스크의 SOL은 Solomon왕의 지혜처럼 우리의 인생을 성공하기
+									위해(Success of Life)&nbsp;다양한 해결방안(Solution)을 제공하는 회사가 되길 바라는
+									의미입니다.&nbsp;</span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);"><br></span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);">세상변화의 속도는 우리가 예측하는 것 그
+									이상으로 급변을 하고 있으며 이 급변하는&nbsp;변화 속도를 가속화 하는 중추기술이 IT관련
+									기술입니다.&nbsp;새로운IT기술과 새로운 패러다임을 따라가지 않으면 경쟁에 뒤쳐질 수 밖에
+									없어&nbsp;도태가 되고 반면에 신 기술을 익혀 이를 앞서나간다면 시대를 이끌어&nbsp;나가는 개척자가 되어
+									산업전반을 주도적으로 이끌어가는 리더가 될 수 있습니다.&nbsp;</span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);"><br></span></span>
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: rgb(102, 102, 102);">이러한 리더가 되기 위해선 우수한 양질의
+									교육이 반드시 필요하다고 생각이 되며&nbsp;그 교육의 중심을 솔데스크에서 함께 하길 원합니다. 수십 년간 축전
+									된 여러분야의&nbsp;IT전문가들이 다양한 방면에서 쌓은 경험을 통해 편리한 위치와 최고의 시설에서&nbsp;</span></span><span
+								style="font-size: 14px; color: rgb(102, 102, 102);">수준높은
+								교육서비스를 책임과 소신을 가지고 고객 여러분들과 하고자 합니다.</span>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="content">
+			<div class="section">
+				<div class="grid-container">
+					<div class="grid-item"><h3>Since: 2009.10.16</h3></div>
+					<div class="grid-item"><h3>CEO: 강재민</h3></div>
+					<div class="grid-item"><h3>기술 협력: Microsoft, AWS,<br> Google Cloud 등</h3></div>
+					<div class="grid-item"><h3>Business: 인공지능 교육 혁신</h3></div>
+				</div>
+			</div>
+
+			<div class="section education-philosophy">
+				<h2>교육철학</h2>
+				<img
+					src="https://cdn.imweb.me/upload/S202208055ceb2ca8f30c0/a4963170e62ff.png"
+					class="fr-fin fr-dib">
+				<p>
+					<img
+						src="https://cdn.imweb.me/upload/S202205103bbf37d4d8229/1071e11f9428f.png"
+						style="height: 77px;"><br> 기술보국(技術保國)의 철학으로 가장 경쟁력있는 교육
+					컨텐츠를 개발하고<br> 보급할 사명을 가진다.
+				</p>
+				<br> <img
+					src="https://cdn.imweb.me/upload/S202208055ceb2ca8f30c0/a4963170e62ff.png"
+					class="fr-fin fr-dib">
+				<p>
+					<img
+						src="https://cdn.imweb.me/upload/S202205103bbf37d4d8229/ec78c13ad0184.png"
+						style="height: 77px;"><br> 고객 감동의 실현을 위해 최선을 다해<br>
+					교육에 필요한 모든 제반 여건을 제공한다.
+				</p>
+				<br> <img
+					src="https://cdn.imweb.me/upload/S202208055ceb2ca8f30c0/a4963170e62ff.png"
+					class="fr-fin fr-dib">
+				<p>
+					<img
+						src="https://cdn.imweb.me/upload/S202205103bbf37d4d8229/d37f110ea3de4.png"
+						style="height: 77px;"><br> 고객의 가치를 높이기 위해 실무업체와 협업을 통한
+					<br>취업대상업체 개발에 최선을 다한다.
+				</p>
+				<br> <img
+					src="https://cdn.imweb.me/upload/S202208055ceb2ca8f30c0/a4963170e62ff.png"
+					class="fr-fin fr-dib">
+				<p>
+					<img
+						src="https://cdn.imweb.me/upload/S202205103bbf37d4d8229/6eb84131587a8.png"
+						style="height: 77px;"><br> 업계 요구에 가장 적합한 인재를 양성하여<br>
+					최고의 교육기관이 되도록 노력한다.
+				</p>
+				<br>
+			</div>
+
+			<div class="section">
+				<h2>경영원칙</h2>
+				<div class="principles">
+					<div class="principle-item">
+						<img src="img/management1.png" alt="원칙 아이콘">
+						<p>
+							능력의 한계,<br> 교육의 한계를 넘어서다.
+						</p>
+					</div>
+					<div class="principle-item">
+						<img src="img/management2.png" alt="원칙 아이콘">
+						<p>
+							교육을 통한<br> 사회 기여에 앞장선다.
+						</p>
+					</div>
+					<div class="principle-item">
+						<img src="img/management3.png" alt="원칙 아이콘">
+						<p>
+							창조적으로 미래를 개척하는 인재양성을<br> 위해 정도경영을 원칙으로 한다.
+						</p>
+					</div>
+					<div class="principle-item">
+						<img src="img/management4.png" alt="원칙 아이콘">
+						<p>
+							직원, 강사, 학생<br> 모두가 행복한 솔데스크
+						</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="section">
+				<h2>조직도</h2>
+				<div class="org-chart">
+					<img src="img/group.png" alt="조직도">
+				</div>
+			</div>
+			<div class="section">
+				<h2 style="margin-bottom: -10px;">교사 소개</h2>
+				<br>
+				<div class="career-container">
+					<img src="img/profile.png" class="profile-img" alt="프로필 사진">
+					<div class="career-text">
+						<p style="text-align: left; margin-top: 8px;">
+							<span style="font-size: 36px;"><strong><span
+									style="color: rgb(74, 106, 236);">권기웅&nbsp;</span></strong></span><span
+								style="font-size: 24px;"><strong><span
+									style="color: rgb(51, 51, 51);">선생님</span></strong></span>
+						</p>
+						<br>
+						<p>
+							<span
+								style="text-align: center; display: inline-block; text-decoration: none; width: 110px; color: #fff; border-radius: 100px; padding: 5px 0px; margin-top: 0px; font-size: 16px; background-color: #4a6aec; transition: all 0.3s;"><strong>Career</strong></span>
+						</p>
+						<p>
+							<br>
+						</p>
+						<p>
+							<span style="font-size: 12px; color: rgb(74, 106, 236);">○&nbsp;</span><span
+								style="color: rgb(74, 106, 236);"><span
+								style="font-size: 16px;">대검찰청 사이버수사과 Python 교육</span></span>
+						</p>
+						<p>
+							<span style="color: rgb(74, 106, 236);"><span
+								style="font-size: 12px;">○&nbsp;</span><span
+								style="font-size: 16px;">고려대학교 4차 산업혁명 선도인력 양성과정 교육</span></span>
+						</p>
+						<p>
+							<span style="color: rgb(74, 106, 236);"><span
+								style="font-size: 12px;">○</span> <span style="font-size: 16px;">경기/경희/대진/동국/부천/충남대학교
+									청년취업아카데미<br>&nbsp; 빅데이터 + 인공지능 + IoT교육
+							</span></span>
+						</p>
+						<br>
+						<p>
+							<span
+								style="text-align: center; display: inline-block; text-decoration: none; width: 110px; color: #fff; border-radius: 100px; padding: 5px 0px; margin-top: 0px; font-size: 16px; background-color: #4a6aec; transition: all 0.3s;"><strong>Interview</strong></span>
+						</p>
+						<p style="margin-top: 20px;">
+							<span style="font-size: 16px;">공부라는 길에 대한 겸손함과</span>
+						</p>
+						<p style="margin-top: 20px;">
+							<span style="font-size: 16px;">해내겠다는 열정으로</span>
+						</p>
+						<p style="margin-top: 20px;">
+							<span style="font-size: 16px;">본인의 선택에 인생을 걸어 주신다면, </span>
+						</p>
+						<p style="margin-top: 20px;">
+							<span style="font-size: 16px;">교육은 여러분을 누구에게도 지지않는 개발자로
+								만들어 드릴 것입니다.</span>
+						</p>
+						<p style="margin-top: 20px;">
+							<span style="font-size: 16px;">덤비십시오.</span>
+						</p>
+						<p style="text-align: left; margin-top: 10px;">
+							<br>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

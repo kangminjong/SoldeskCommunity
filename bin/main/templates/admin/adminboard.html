@@ -1,0 +1,38 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지 - 게시물</title>
+    <link rel="styleSheet" href="css/admin.css">
+</head>
+<body>
+	<!-- 메뉴바 -->
+    <div class="navbar">
+		<a href="/main.go">홈페이지</a>
+        <a href="/admin.user">회원 관리</a>
+        <a href="/admin.board">게시판 관리</a>
+        <a href="/admin.notice">공지사항 관리</a>
+        <a href="/admin.classid">반 관리</a>
+    </div>
+    <h1>관리자 페이지</h1>
+    
+    <h2>게시물 목록</h2>
+
+    <table border="1" th:if="${boards != null && !boards.isEmpty()}">
+        <tr>
+            <th>게시물 ID</th>
+            <th>제목</th>
+            <th>작성자 이메일</th>
+            <th>삭제</th>
+        </tr>
+        <tr th:each="b : ${boards}">
+            <td th:text="${b.boardID}"></td>
+            <td th:text="${b.title}"></td>
+            <td th:text="${b.userEmail.email}"></td>
+            <td>
+			    <a th:href="@{/admin.board.delete(boardID=${b.boardID})}" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+			</td>
+        </tr>
+    </table>
+</body>
+</html>

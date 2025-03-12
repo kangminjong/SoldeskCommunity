@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/move.js"></script>
+<link rel="styleSheet" href="css/login.css">
+</head>
+<body>
+	<table id="snsLoginedTable" style="text-align: center;">
+    <tr>
+        <td colspan="2">
+            <img th:src="@{|user/${session.login.photo}|}" class="profile-img">
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" th:text="|${session.login.name}님 환영합니다.|" class="welcome-text"></td>
+    </tr>
+    <tr id="loginedBtn">
+        <td colspan="2">
+            <button onclick="infoGo();">회원정보</button>
+            <button onclick="logoutDo();">로그아웃</button>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

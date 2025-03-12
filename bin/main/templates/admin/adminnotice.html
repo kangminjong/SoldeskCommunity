@@ -1,0 +1,38 @@
+ <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지 - 게시물</title>
+    <link rel="styleSheet" href="css/admin.css">
+	<script type="text/javascript" src="js/move.js"></script>
+</head>
+<body>
+	<!-- 메뉴바 -->
+    <div class="navbar">
+		<a href="/main.go">홈페이지</a>
+        <a href="/admin.user">회원 관리</a>
+        <a href="/admin.board">게시판 관리</a>
+        <a href="/admin.notice">공지사항 관리</a>
+        <a href="/admin.classid">반 관리</a>
+    </div>
+    <h1>관리자 페이지</h1>
+    
+    <h2>공지사항 목록</h2>
+
+    <table border="1" th:if="${notices != null && !notices.isEmpty()}">
+        <tr>
+            <th>공지사항 ID</th>
+            <th>제목</th>
+            
+            <th>삭제</th>
+        </tr>
+        <tr th:each="n : ${notices}">
+			<td th:text="${n.noticeID}"></td>
+            <td th:text="${n.noticeTitle}"></td>
+            <td>
+			    <a th:onclick="adminNoticeDelete([[${n.noticeID}]])" >삭제</a>
+			</td>
+        </tr>
+    </table>
+</body>
+</html>

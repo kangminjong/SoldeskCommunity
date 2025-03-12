@@ -1,0 +1,181 @@
+@charset "UTF-8";
+* {	
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	background-color: #ffffff;   
+}
+
+.logo {
+	display: block; /* 블록 요소로 변경 (줄바꿈 효과) */
+	margin-bottom: 40px; /* 텍스트와 간격 추가 */
+}
+
+.nav-bar {
+	width: 100%;
+	background: #003399;
+	text-align: center;
+	padding: 10px 0;
+	color: white;
+	font-size: 18px;
+}
+
+.soldesk {
+	width: 80%;
+	margin: 50px auto;
+}
+
+.section {
+	background: white;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	margin-bottom: 40px;
+}
+
+.section h2 {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.flex-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.image-container {
+	width: 40%;
+}
+
+.image-container img {
+	width: 100%;
+	border-radius: 8px;
+}
+
+.text-container {
+	width: 55%;
+}
+
+.content {
+	width: 80%;
+	margin: 50px auto;
+}
+
+.grid-container {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.grid-item {
+	width: 48%;
+	background: #e3e3ff;
+	padding: 20px;
+	border-radius: 8px;
+	text-align: center;
+	margin-bottom: 20px;
+	color: rgb(24,81,224);
+}
+
+.org-chart {
+	text-align: center;
+	margin-top: 50px;
+}
+
+.org-chart img {
+	max-width: 100%;
+}
+
+.principles {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	text-align: center;
+}
+
+.principle-item {
+	width: 30%;
+	padding: 20px;
+}
+
+.principle-item img {
+	width: 80px;
+	height: 80px;
+	margin-bottom: 10px;
+}
+
+.education-philosophy {
+	text-align: center;
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.education-philosophy p {
+	margin: 10px 0;
+	font-size: 18px;
+}
+
+.fr-fin {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.fr-dib {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	padding-bottom: 20px;
+}
+
+.career-container {
+	display: flex; /* 가로 정렬 */
+	align-items: center; /* 수직 중앙 정렬 */
+	gap: 20px; /* 이미지와 글 사이 간격 */
+	margin: auto; /* 가운데 정렬 */
+	padding: 20px;
+}
+
+.profile-img {
+	width: 50%; /* 프로필 이미지 크기 조정 */
+	object-fit: cover; /* 이미지 비율 유지 */
+}
+
+.career-text {
+	flex: 1; /* 남은 공간을 글 영역이 차지하도록 설정 */
+	margin-left: 10px;
+}
+
+.career-title, .interview-title {
+	display: inline-block;
+	background-color: #4a6aec;
+	color: white;
+	padding: 5px 15px;
+	border-radius: 20px;
+	font-weight: bold;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+ul li {
+	font-size: 16px;
+	color: #4a6aec;
+	margin-bottom: 5px;
+}
+
+@media ( max-width : 768px) {
+	.grid-item, .principle-item {
+		width: 100%;
+	}
+}

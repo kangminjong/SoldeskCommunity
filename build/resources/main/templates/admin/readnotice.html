@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+<meta charset="UTF-8">
+<title>Soldesk Community - 공지사항 본문</title>
+<script type="text/javascript" src="/js/move.js"></script>
+<script type="text/javascript" src="/js/jQuery.js"></script>
+<script type="text/javascript" src="/js/ungman_jQuery.js"></script>
+<link rel="styleSheet" href="css/board.css">
+<script type="text/javascript"></script>
+<style type="text/css">
+table {
+	margin-left: auto;
+	margin-right: auto;
+	width: 100%;
+	border-collapse: collapse;
+}
+</style>
+</head>
+<body>
+	<table class="board-container" border="1">
+		<tr>
+			<td width="20%" align="center">제목</td>
+			<td colspan="2" th:text="${notices.noticeTitle}" align="center"
+				class="board-title"></td>
+		</tr>
+		<tr>
+			<td align="center">작성자</td>
+			<td class="board-meta">관리자</td>
+		</tr>
+		<tr>
+			<td align="center">작성일</td>
+			<td colspan="2"
+				th:text="${#dates.format(notices.noticeDate, 'yyyy-MM-dd HH:mm')}"
+				align="center" class="board-meta"></td>
+		</tr>
+		<tr>
+			<td align="center" colspan="2">내용</td>
+		</tr>
+		<tr>
+
+			<td colspan="2" th:text="${notices.noticeContent}" align="center"
+				class="board-content"></td>
+		</tr>
+		<tr>
+			<td th:if="${noticeImage}" colspan="2" align="center"
+				class="board-image">
+				<img th:src="@{/noticeImage/{imageName}(imageName=${noticeImage.noticeImageUrl})}">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center">첨부파일</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center" th:if="${noticeFile}"><a
+				th:text="${noticeFile.noticeFileUrl}"
+				th:href="@{/noticeDownloadFile/{filename}(filename=${noticeFile.noticeFileUrl})}"></a></td>
+		</tr>
+		<tr th:if="${session.login.role == 'Y'}">
+			<input th:value="${notices.noticeID}" name="deleteBoardId"
+				type="hidden">
+			<form action="/notice.update.go">
+				<td align="right" colspan="2"><input
+					th:value=${notices.noticeID} name="noticeID" type="hidden">
+					<button type="submit" class="snsPostReplyWriteBtn">수정</button>
+			</form>
+			<button th:onclick="noticeDelete([[${notices.noticeID}]])"
+				class="snsPostReplyWriteBtn">삭제</button>
+			</td>
+		</tr>
+	</table>
+	<table>
+		<tr>
+			<td align="center"><button
+					th:onclick="|location.href='@{notice.go}'|"
+					class="snsPostReplyWriteBtn" id="backBtn">목록으로</button></td>
+		</tr>
+	</table>
+</body>
+</html>

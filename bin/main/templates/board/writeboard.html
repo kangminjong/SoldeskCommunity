@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Soldesk Community - 게시글 작성</title>
+	<link rel="stylesheet" href="css/board.css">
+	<script type="text/javascript" src="js/jQuery.js"></script>
+	<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+	
+	<script type="text/javascript" src="js/validCheck.js"></script>
+	<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+	<script type="text/javascript" src="js/move.js"></script>
+</head>
+
+<body>
+	<form enctype="multipart/form-data" action="write.Do" method="post" onsubmit="return boardWriteCheck(this)">
+		<div class="form-container">
+			<h4>글쓰기</h4>
+			<input type="hidden" th:value="${token}" name="token">
+			<div class="input-group">
+				<label class="input-label">제목</label>
+				<textarea name="title" id="inTitle" class="form-input" placeholder="제목" maxlength="100"></textarea>
+			</div>
+			<div class="input-group">
+				<label class="input-label">내용</label>
+				<textarea name="content" id="inContent" class="form-input" placeholder="내용"></textarea>
+			</div>
+			<div class="input-group">
+				<label for="boardImageFile" class="input-label">사진 첨부 : </label>
+				<input type="file" name="boardImageFile" id="boardImageFile" class="file-input" multiple=>
+			</div>
+			<div class="input-group">
+			  <label for="boardFile" class="input-label">첨부 파일 : </label>
+			  <input type="file" name="boardFile" id="boardFile" class="file-input"/>
+			</div>
+			<div class="board-form__group">
+				<label for="anonymous">익명</label>
+				<input type="checkbox" name="anonymous" id="board-anonymous" value="true" checked="checked" />
+			</div>
+			<div class="submit-btn">
+				<button type="submit" class="submit-button">글 작성</button>
+			</div>
+		</div>
+	</form>
+
+
+</body>
+
+</html>

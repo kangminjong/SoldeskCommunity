@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>관리자 페이지 - 회원</title>
+    <link rel="styleSheet" href="css/admin.css">
+</head>
+<body>
+	<!-- 메뉴바 -->
+    <div class="navbar">
+        <a href="/main.go">홈페이지</a>
+        <a href="/admin.user">회원 관리</a>
+        <a href="/admin.board">게시판 관리</a>
+        <a href="/admin.notice">공지사항 관리</a>
+        <a href="/admin.classid">반 관리</a>
+    </div>
+    <h1>관리자 페이지</h1>
+    <h2>회원 목록</h2>
+
+    <table border="1" th:if="${users != null && !users.isEmpty()}">
+        <tr>
+            <th>이메일</th>
+            <th>이름</th>
+            <th>삭제</th>
+        </tr>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.email}"></td>
+            <td th:text="${u.name}"></td>
+            <td>
+                <a th:href="@{/admin.user.delete(email=${u.email})}" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

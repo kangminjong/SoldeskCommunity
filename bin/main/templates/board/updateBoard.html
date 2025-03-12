@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Community - 게시글 작성</title>
+<link rel="stylesheet" href="css/board.css">
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/validCheck.js"></script>
+</head>
+
+<form enctype="multipart/form-data" action="write.update.do"
+	method="post" onsubmit="return boardUpdateWriteCheck(this);">
+	<div class="form-container">
+		<h4>글수정</h4>
+		<input type="hidden" th:value="${token}" name="token"> <input
+			th:value="${showdbBoard.boardID}" name="boardID" type="hidden">
+
+		<div class="input-group">
+			<label class="input-label">제목</label>
+			<textarea id="inTitle" class="form-input" placeholder="제목"
+				maxlength="100" th:text="${showdbBoard.title}" name="title"></textarea>
+		</div>
+
+		<div class="input-group">
+			<label class="input-label">내용</label>
+			<textarea id="inContent" class="form-input" placeholder="내용"
+				th:text="${showdbBoard.content}" name="content"></textarea>
+		</div>
+
+		<!-- 이미지 첨부 -->
+		<div th:if="${imagedbBoard}" class="input-group">
+			<input th:value="${imagedbBoard.boardImageID}" type="hidden"
+				name="boardImageID"> <img
+				th:src="@{/boardImage/{imageName}(imageName=${imagedbBoard.boardImageUrl})}"
+				class="preview-image">
+		</div>
+
+		<div class="input-group">
+			<label for="boardImageFile" class="input-label">사진 첨부</label> <input
+				type="file" name="boardImageFile" id="boardImageFile"
+				class="file-input">
+		</div>
+		<div class="input-group">
+			<label for="boardImageFile" class="input-label">첨부 파일</label> <input
+				type="file" name="boardFile" id="boardFile" class="file-input" />
+		</div>
+
+		<!-- 파일 첨부 -->
+		<div th:if="${filedbBoard}" class="input-group">
+			<input th:value="${filedbBoard.boardFileId}" type="hidden"
+				name="boardFileId"> <a th:text="${filedbBoard.boardFileUrl}"
+				th:href="@{|downloadFile/${filedbBoard.boardFileUrl}|}"
+				class="file-link">첨부파일 다운로드</a>
+		</div>
+
+		<!-- 익명 설정 -->
+		<div class="input-group">
+			<label for="anonymous" class="input-label">익명</label> <input
+				type="checkbox" id="anonymous" value="true" name="anonymous"
+				th:checked="${showdbBoard.hideName == 'Y'}">
+		</div>
+
+		<!-- 제출 버튼 -->
+		<div class="submit-btn">
+			<button type="submit" class="submit-button">글 수정</button>
+		</div>
+	</div>
+</form>
+
+</html>

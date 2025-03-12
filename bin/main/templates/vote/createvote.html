@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>투표 생성</title>
+<link rel="stylesheet" th:href="@{/css/vote.css}">
+</head>
+<body>
+	<h1 class="vote-create-title">새 투표 만들기</h1>
+
+	<!-- 결과 메시지 표시 -->
+	<div th:if="${result}" class="vote-create-result">
+		<p th:text="${result}"></p>
+	</div>
+
+	<form th:action="@{/votecreate.do}" method="post"
+		onsubmit="return validateForm()" class="vote-create-form">
+		<!-- 투표 제목 입력 -->
+		<label for="title" class="vote-create-label">투표 제목</label> <input
+			type="text" name="title" id="title" required
+			class="vote-create-input"><br>
+		<br>
+
+		<!-- 다중 선택 가능 여부 설정 -->
+		<div class="vote-create-multi-choice">
+			<label for="multiChoice" class="vote-create-label">다중 선택 가능</label> <input
+				type="checkbox" id="multiChoice" onchange="setCheckboxValues()"
+				class="vote-create-checkbox"> <input type="hidden"
+				name="multiChoice" id="multiChoiceHidden" value="N">
+		</div>
+		<br>
+
+		<!-- 투표 시작 날짜 -->
+		<label for="startDate" class="vote-create-label">시작 날짜</label> <input
+			type="date" name="startDate" id="startDate" required
+			class="vote-create-input"><br>
+		<br>
+
+		<!-- 투표 종료 날짜 -->
+		<label for="endDate" class="vote-create-label">끝 날짜</label> <input
+			type="date" name="endDate" id="endDate" required
+			class="vote-create-input"><br>
+		<br>
+
+		<h3 class="vote-create-choices-title">선택지</h3>
+		<div id="choice" class="vote-create-choices">
+			<div class="vote-create-choice-item">
+				<input type="text" name="choice" placeholder="선택지 입력" required
+					class="vote-create-choice-input">
+				<button type="button" onclick="removeChoice(this)"
+					class="vote-create-choice-remove">삭제</button>
+			</div>
+		</div>
+
+		<button type="button" onclick="addChoice()"
+			class="vote-create-add-choice">선택지 추가</button>
+		<br>
+		<br>
+
+		<button type="submit" class="vote-create-submit">투표 생성</button>
+	</form>
+
+	<a href="/votelist.go" class="vote-create-back-link">목록으로 돌아가기</a>
+
+	<script>
+    function setCheckboxValues() {
+        document.getElementById("multiChoiceHidden").value = document.getElementById("multiChoice").checked ? "Y" : "N";
+    }
+
+    function addChoice() {
+        var choiceDiv = document.createElement('div');
+        choiceDiv.classList.add('vote-create-choice-item');
+        choiceDiv.innerHTML = `
+            <input type="text" name="choice" placeholder="선택지 입력" required class="vote-create-choice-input">
+            <button type="button" onclick="removeChoice(this)" class="vote-create-choice-remove">삭제</button>
+        `;
+        document.getElementById('choice').appendChild(choiceDiv);
+    }
+
+    function removeChoice(button) {
+        button.parentElement.remove();
+    }
+
+    function validateForm() {
+        var choices = document.getElementsByName("choice");
+        var choiceCount = 0;
+        
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].value.trim() !== "") {
+                choiceCount++;
+            }else{
+            	alert("항목이 비어있습니다.");
+            	return false;
+            }
+        }
+        
+        if (choiceCount < 2) {
+            alert("선택지는 최소 2개 이상이어야 합니다.");
+            return false;
+        }
+        
+        var startDate = document.getElementById("startDate").value;
+        var endDate = document.getElementById("endDate").value;
+        
+        if (startDate && endDate && startDate > endDate) {
+            alert("시작 날짜가 종료 날짜보다 늦을 수 없습니다.");
+            return false;
+        }
+        
+        return true;
+    }
+    </script>
+</body>
+</html>

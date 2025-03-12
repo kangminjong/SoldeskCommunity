@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="styleSheet" href="css/find.css">
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/validCheck.js"></script>
+</head>
+<body>
+	<a href="main.go"><img src="img/MainLogo.png" id="siteLogo"
+		alt="로고 이미지" style="top: 90px;"></a>
+	<div class="find-id-container">
+		<form action="/findEmail.do" method="post"
+			onsubmit="return findEmailCheck(this);">
+			<table class="find-id-table">
+				<tr>
+					<th colspan="2">아이디 찾기</th>
+				</tr>
+
+				<tr>
+					<td colspan="2"><input type="text" name="name"
+						placeholder="가입하신 이름을 입력해주세요" autocomplete="none"></td>
+				</tr>
+
+				<tr>
+					<td colspan="2"><input type="text" name="tel"
+						placeholder="등록된 전화번호를 입력해주세요" autocomplete="none"></td>
+				</tr>
+
+				<tr>
+					<td colspan="2">
+						<button type="submit">이메일 찾기</button>
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="2"><a href="/login.go">로그인 페이지로 이동</a></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

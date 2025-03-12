@@ -1,0 +1,177 @@
+/* 캘린더 전용 스타일 - body 선택자 없음 */
+
+/* 캘린더 컨테이너 스타일 */
+.calendar-wrapper {
+  font-family: 'Noto Sans KR', Arial, sans-serif;
+  line-height: 1.6;
+  max-width: 1000px;
+  margin: 30px auto;
+  padding: 30px;
+  color: #333;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-top: 4px solid #4285f4;
+}
+
+/* 타이틀 스타일 */
+.calendar-title {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* 버튼 컨테이너 */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* 버튼 기본 스타일 */
+.cal-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 로그인 버튼 */
+#authorize_button {
+  background-color: #4285f4;
+  color: white;
+}
+
+#authorize_button:hover {
+  background-color: #3367d6;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 로그아웃 버튼 */
+#signout_button {
+  background-color: #f8f9fa;
+  color: #3c4043;
+  border: 1px solid #dadce0;
+}
+
+#signout_button:hover {
+  background-color: #ebedef;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 캘린더 선택 드롭다운 */
+.calendar-dropdown {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  margin: 25px auto;
+  display: block;
+  width: 80%;
+  max-width: 500px;
+  font-size: 14px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 이벤트 폼 컨테이너 */
+.event-form {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  margin: 30px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  width: 80%;
+  max-width: 600px;
+  border: 1px solid #eaeaea;
+}
+
+/* 이벤트 폼 헤더 */
+.event-form-title {
+  margin-top: 0;
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* 이벤트 폼 입력 필드 */
+.event-input {
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  width: 100%;
+  font-size: 14px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.event-input:focus {
+  border-color: #4285f4;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+/* 이벤트 추가 버튼 */
+.add-event-btn {
+  background-color: #34a853;
+  color: white;
+  display: block;
+  margin: 15px auto 0;
+  width: 100%;
+  padding: 12px;
+}
+
+.add-event-btn:hover {
+  background-color: #2e8b57;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 메시지 표시 영역 */
+.message-area {
+  text-align: center;
+  min-height: 20px;
+  margin: 20px 0;
+  padding: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #d23;
+  background-color: rgba(255, 235, 238, 0.8);
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.message-area:not(:empty) {
+  opacity: 1;
+}
+
+/* 캘린더 iframe 컨테이너 */
+.calendar-iframe-container {
+  margin: 30px auto;
+  text-align: center;
+}
+
+/* 캘린더 iframe */
+.calendar-iframe {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  max-width: 100%;
+  height: 600px;
+  width: 800px;
+  border: 1px solid #eaeaea;
+  background-color: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.calendar-iframe:hover {
+  box-shadow: 0 8px 24px rgba(66, 133, 244, 0.18);
+}

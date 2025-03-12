@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>투표 결과</title>
+<link rel="stylesheet" th:href="@{/css/vote.css}">
+</head>
+<body>
+	<h2 class="vote-detail-title">투표 결과</h2>
+
+	<!-- 투표 제목 -->
+	<p class="vote-detail-title-info">
+		<span th:text="${vote.title}"></span>
+	</p>
+
+	<!-- 결과 테이블 -->
+	<table th:if="${voteChoices != null and voteChoices.size() > 0}"
+		class="vote-detail-table">
+		<thead>
+			<tr>
+				<th class="vote-detail-table-header">선택지</th>
+				<th class="vote-detail-table-header">득표 수</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="option : ${voteChoices}" class="vote-detail-table-row">
+				<td th:text="${option.choice}" class="vote-detail-table-data"></td>
+				<td th:text="${option.voteCount}" class="vote-detail-table-data"></td>
+			</tr>
+		</tbody>
+	</table>
+
+	<!-- 결과가 없으면 이 문구 표시 -->
+	<div th:if="${voteChoices == null or voteChoices.size() == 0}"
+		class="vote-detail-no-result">
+		<p>아직 투표 결과가 없습니다.</p>
+	</div>
+
+	<div class="vote-list-button-container">
+		<!-- 목록으로 돌아가기 버튼 -->
+		<a href="/votelist.go" class="vote-detail-back-link">목록으로</a>
+	</div>
+</body>
+</html>

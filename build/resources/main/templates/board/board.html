@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www/thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Soldesk Community - 학생게시판</title>
+	<link rel="styleSheet" href="css/index.css">
+	<link rel="styleSheet" href="css/board.css">
+	<script type="text/javascript" src="js/jQuery.js"></script>
+	<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+	<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+	<script type="text/javascript" src="js/validCheck.js"></script>
+	<script type="text/javascript" src="js/move.js"></script>
+</head>
+
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<input th:value="${curPage}" name="page" type="hidden">
+	<h1 align="center">학생게시판</h1>
+	<table class="boardTable">
+		<tr>
+			<form action="board.Search" method="post">
+				<td align="center" colspan="2">검색 : <input name="searchTxt">
+					<button type="submit"><img class="boardSearchImg" src="img/search.png"></button>
+				</td>
+			</form>
+		</tr>
+	</table>
+	<table th:each="bp : ${bp}" id="snsShowTable" th:onclick="writeShow([[${bp.boardID}]])">
+			<tr>
+				<td th:if = "${bp.hideName == 'Y'}" align="center">익명</td>
+				<td th:if = "${bp.hideName == 'N'}" th:text="${bp.userEmail.name}" align="center">익명</td>
+				<td th:text="${bp.title}" align="center"></td>
+			</tr>
+	</table>
+
+	<table class="boardTable">
+		<tr>
+			<td align="center" colspan="2" class="write-btn-container">
+				<button onclick="writeGo()">글쓰기</button>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div class="pagination-container">
+					<button th:if=${curPage!=1} id="prevPageBtn" class="prev-btn"
+						th:onclick="snsPageChange([[${curPage - 1}]])">◀</button>
+					<button th:if=${curPage!=pageCount} id="nextPageBtn" class="next-btn"
+						th:onclick="snsPageChange([[${curPage + 1}]])">▶</button>
+				</div>
+			</td>
+		</tr>
+	</table>
+</body>
+
+</html>

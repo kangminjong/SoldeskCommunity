@@ -1,0 +1,544 @@
+@charset "UTF-8";
+
+/* ============= 공통 기본 스타일 ============= */
+body {
+    font-family: Arial, sans-serif;
+    padding: 0;
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+    background-color: #f8f9fa;
+    position: relative; /* 하위 요소의 절대 위치 기준 */
+    margin: 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* 페이지 제목 및 소제목 */
+h1, h2, h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* 데코레이티브 제목 (예: 투표 제목) */
+.vote-title {
+    font-size: 32px;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+    text-align: center;
+}
+
+/* 투표 헤더 영역 - 제목과 삭제 버튼 배치를 위한 컨테이너 */
+.vote-header-container {
+    position: relative;
+    width: 90%;	
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 링크 기본 스타일 */
+.plus {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.plus:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* ============= 버튼 및 링크 (공통) ============= */
+button,
+.vote-list-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+button:hover,
+.vote-list-button:hover {
+    background-color: #0056b3;
+}
+button:active,
+.vote-list-button:active {
+    transform: translateY(2px);
+}
+
+/* 결과 보기, 목록으로 등 버튼형 링크 */
+.vote-result-link {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.vote-result-link:hover {
+    background-color: #0056b3;
+}
+.vote-result-link:active {
+    transform: translateY(2px);
+}
+
+/* 뒤로가기 링크 */
+.vote-create-back-link,
+.vote-detail-back-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    background-color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-right: 10px;
+}
+
+/* 삭제 링크 추가 - 우측 상단 배치 */
+.vote-detail-delete-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    background-color: #dc3545;
+    padding: 8px 16px; /* 좀 더 작게 만들기 */
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    position: absolute;
+    top: 10px;
+    right: 0;
+}
+
+.vote-detail-delete-link:hover {
+    background-color: #c82333;
+    color: #fff;
+    text-decoration: none;
+}
+
+.vote-detail-delete-link:active {
+    transform: translateY(2px);
+}
+
+/* 뒤로가기 버튼을 오른쪽 정렬 */
+.vote-back-button-container {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+.vote-create-back-link:hover,
+.vote-detail-back-link:hover {
+    background-color: #0056b3;
+}
+.vote-create-back-link:active,
+.vote-detail-back-link:active {
+    transform: translateY(2px);
+}
+
+/* 에러 메시지 */
+.vote-error p {
+    color: #d8000c;
+    background-color: #ffbaba;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* ============= 투표 목록 (votelist.html) ============= */
+/* 결과 메시지 박스 */
+.result-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 15px;
+    margin: 20px auto;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 18px;
+    max-width: 600px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 투표 생성 버튼 */
+.vote-create-link {
+    display: block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 22px;
+    margin: 30px auto;
+    text-align: center;
+    width: fit-content;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+.vote-create-link:hover {
+    background-color: #0056b3;
+}
+.vote-create-link:active {
+    transform: translateY(2px);
+}
+
+/* 투표 목록 테이블 */
+.vote-table {
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.vote-table thead {
+    background-color: #007bff;
+}
+.vote-table th,
+.vote-table td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 16px;
+}
+.vote-table th {
+    color: #fff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.vote-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+.vote-table tr:hover {
+    background-color: #f1f1f1;
+    transform: scale(1.01);
+    transition: transform 0.2s ease-in-out;
+}
+
+/* ============= 투표 상세/진행 (vote.html) ============= */
+.vote-title {
+    font-size: 34px;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #007bff;
+}
+.vote-form {
+    max-width: 800px;
+    margin: 20px auto 30px;
+    padding: 35px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.vote-result {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 투표 안내 문구 가운데 정렬 */
+.vote-guide {
+    text-align: center;
+    font-size: 16px;
+    font-style: italic;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+/* 투표 시작일 & 종료일 한 줄 배치 */
+.vote-info {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.vote-info p {
+    font-size: 16px;
+    margin: 5px 0;
+    color: #555;
+}
+
+.vote-info span {
+    font-weight: bold;
+    color: #333;
+}
+
+/* 단일/다중 선택 스타일 */
+.vote-choice-group {
+    margin-top: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.vote-choice-group p {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.vote-choice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.vote-choice input[type="radio"],
+.vote-choice input[type="checkbox"] {
+    transform: scale(1.5);
+    margin-right: 12px;
+}
+.vote-choice label {
+    font-size: 18px;
+    flex-grow: 1;
+    text-align: left;
+}
+
+/* 목록으로 버튼 위치 조정 */
+.vote-list-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* 투표하기 버튼 가운데 정렬 */
+.vote-button {
+    display: block;
+    margin: 30px auto 0;
+    background-color: #007bff;
+    font-size: 18px;
+    padding: 12px 40px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+}
+.vote-button:hover {
+    background-color: #0056b3;
+}
+
+/* ============= 투표 생성 (createvote.html) ============= */
+.vote-create-title {
+    font-size: 34px;
+    margin-bottom: 25px;
+    text-align: center;
+    color: #007bff;
+}
+.vote-create-form {
+    max-width: 600px;
+    margin: 20px auto 30px;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.vote-create-result {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 폼 라벨 및 입력 */
+.vote-create-label {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: left;
+}
+.vote-create-input {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.vote-create-input:focus {
+    border-color: #007bff;
+}
+
+/* 다중 선택 체크박스 */
+.vote-create-multi-choice {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.vote-create-multi-choice label {
+    margin-right: 10px;
+}
+.vote-create-multi-choice input[type="checkbox"] {
+    transform: translateY(1px);
+}
+
+/* 선택지 영역 */
+.vote-create-choices-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.vote-create-choices {
+    margin-bottom: 25px;
+}
+.vote-create-choice-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.vote-create-choice-item input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.vote-create-choice-item input[type="text"]:focus {
+    border-color: #007bff;
+}
+.vote-create-choice-remove {
+    background-color: #dc3545;
+    margin-left: 10px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+.vote-create-choice-remove:hover {
+    background-color: #c82333;
+}
+.vote-create-add-choice {
+    background-color: #28a745;
+    padding: 10px 15px;
+    border-radius: 5px;
+    float: right;
+    transition: background-color 0.3s ease;
+}
+.vote-create-add-choice:hover {
+    background-color: #218838;
+}
+
+/* 제출 버튼 */
+.vote-create-submit {
+    display: block;
+    margin: 30px auto 0;
+    background-color: #007bff;
+    font-size: 18px;
+    padding: 12px 40px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.vote-create-submit:hover {
+    background-color: #0056b3;
+}
+
+/* ============= 투표 결과 (result.html) ============= */
+.vote-detail-title {
+    font-size: 34px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.vote-detail-title-info {
+    font-size: 22px;
+    font-weight: 500;
+    margin: 15px auto 20px;
+    color: #007bff;
+    background-color: #e7f1ff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    display: flex;
+}
+.vote-detail-result {
+    text-align: center;
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #555;
+}
+/* 결과 테이블 */
+.vote-detail-table {
+    width: 90%;
+    max-width: 1000px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.vote-detail-table th,
+.vote-detail-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    text-align: center;
+}
+.vote-detail-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+}
+.vote-detail-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+.vote-detail-no-result {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 18px;
+    color: #999;
+}
+
+/* ============= 반응형 디자인 ============= */
+@media (max-width: 768px) {
+    .vote-table,
+    .vote-form,
+    .vote-create-form,
+    .vote-detail-table {
+        width: 95%;
+        margin: 10px auto;
+    }
+    .vote-create-submit,
+    .vote-create-link,
+    .vote-result-link,
+    .vote-list-button {
+        font-size: 16px;
+        padding: 10px 15px;
+    }
+    .vote-title, .vote-detail-title {
+        font-size: 28px;
+    }
+    
+    /* 모바일 화면에서 삭제 버튼 위치 조정 */
+    .vote-detail-delete-link {
+        position: static;
+        margin-top: 20px;
+        display: block;
+        width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

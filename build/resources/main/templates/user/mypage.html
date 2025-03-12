@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Community - 마이페이지</title>
+<link rel="styleSheet" href="css/login.css">
+<script type="text/javascript" src="js/validCheck.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/move.js"></script>
+</head>
+<body>
+	<div class="mypage-container">
+		<table class="mypage-table" style="align-items: center;">
+			<form action="user.update.do" method="post"
+				enctype="multipart/form-data"
+				onsubmit="return userUpdateCheck(this);">
+				<tr>
+					<td colspan="2" align="center">
+						<h2>마이페이지</h2>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><img
+						th:src="@{|user/${session.login.photo}|}"><br> <input
+						type="file" name="photoTemp"></td>
+				</tr>
+				<tr>
+					<td>아이디</td>
+					<td th:text="|&nbsp;${session.login.email}|"></td>
+				</tr>
+				<tr>
+					<td>비밀번호</td>
+					<td><input name="pw" maxlength="10" autocomplete="off"
+						type="password" placeholder="pw"></td>
+				</tr>
+				<tr>
+					<td>비밀번호 확인</td>
+					<td><input name="pwChk" maxlength="10" autocomplete="off"
+						type="password" placeholder="pw확인" class="textType"></td>
+				</tr>
+				<tr>
+					<td>이름</td>
+					<td><input name="name" th:value="${session.login.name}"
+						maxlength="10" autocomplete="off" placeholder="이름" id="userInput"></td>
+				</tr>
+				<tr>
+					<td>생년월일</td>
+					<td><div
+							th:text="|${#dates.format(session.login.birthday, 'yyyy-MM-dd')}|"></div></td>
+				</tr>
+				<tr>
+					<td>전화번호</td>
+					<td><input name="tel" type="text"
+						th:value="${session.login.tel}"></td>
+				</tr>
+				<tr>
+					<td>우편번호</td>
+					<td><input id="memberAddr1Input" readonly="readonly"
+						name="addr1" th:value="${addr2}" autocomplete="off"
+						placeholder="우편번호"></td>
+				</tr>
+				<tr>
+					<td>주소</td>
+					<td><input id="memberAddr2Input" readonly="readonly"
+						name="addr2" th:value="${addr3}" autocomplete="off"
+						placeholder="주소"></td>
+				</tr>
+				<tr>
+					<td>상세주소</td>
+					<td><input th:value="${addr1}" autocomplete="off" name="addr3"
+						placeholder="상세주소" id="userInput"></td>
+				</tr>
+				<tr>
+					<td>반번호</td>
+					<td th:text="|&nbsp;${session.login.classId}|"></td>
+				</tr>
+				<tr>
+					<td td colspan="2">
+						<div class="mypage-buttons">
+							<button class="update-btn">정보 수정</button>
+			</form>
+							<button class="delete-btn" onclick="byeDo();">회원 탈퇴</button>
+						</div>
+					</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Community - 이메일 찾기 결과</title>
+<link rel="styleSheet" href="css/find.css">
+</head>
+<body>
+	<table class="result-table">
+		<tr>
+			<th>아이디 찾기 결과</th>
+		</tr>
+		<tr>
+			<td class="result-text" align="center" th:text="${result}"></td>
+		</tr>
+		<tr>
+			<td class="link-container"><a href="/login.go">로그인 페이지로 이동</a></td>
+		</tr>
+	</table>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Commnunity - 로그인</title>
+<link rel="styleSheet" href="css/login.css">
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/validCheck.js"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+<style type="text/css">
+body {
+	overflow: hidden;
+}
+</style>
+</head>
+<body>	
+	
+	<div class="login-container">
+	
+		<form action="login.do" method="post"
+			onsubmit="return loginCheck(this);">
+			<a href="main.go"><img src="img/MainLogo.png" alt="로고 이미지"></a>
+			<input type="text" placeholder="아이디를 입력하세요" name="email"
+				class="loginEmail" autocomplete="none"> 
+				<input name = "loginValidCheck" id = "loginValidCheck" th:value = 0 type="hidden">
+				<input type="password"
+				placeholder="비밀번호를 입력하세요" name="pw" class="emailPw">
+			<button type="submit">로그인</button>
+			<div class="actions">
+				<a href="findEmail.go">아이디 찾기</a> <a href="findpw.go">비밀번호 찾기</a> <a
+					href="join.go">회원가입</a>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

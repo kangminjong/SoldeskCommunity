@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>투표</title>
+<script type="text/javascript" src="/js/move.js"></script>
+<link rel="stylesheet" th:href="@{/css/vote.css}">
+<script type="text/javascript" src="/js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="/js/validCheck.js"></script>
+</head>
+<body>
+
+	<!-- 헤더 컨테이너 - 타이틀과 삭제 버튼 -->
+	<div class="vote-header-container">
+		<h2 class="vote-title" th:text="${vote.title} + ' 투표'"></h2>
+		<!-- 삭제 버튼을 상단 우측에 배치 -->
+		<a th:if="${vote.userEmail == session.login.email}"
+			class="vote-detail-delete-link"
+			th:onclick="voteDelete([[${vote.voteId}]])">삭제</a>
+	</div>
+
+	<!-- 투표 시작일자와 종료일자 -->
+	<div class="vote-info">
+		<p>
+			투표 시작일: <span
+				th:text="${#dates.format(vote.startDate, 'yyyy-MM-dd')}"></span>
+		</p>
+		<p>
+			투표 종료일: <span th:text="${#dates.format(vote.endDate, 'yyyy-MM-dd')}"></span>
+		</p>
+	</div>
+
+	<div class="vote-guide">
+		<p>투표는 한번만 가능하니, 신중하게 선택해주시기 바랍니다.</p>
+	</div>
+
+	<form class="vote-form"
+		th:action="@{/vote/{voteId}/submit(voteId=${vote.voteId})}"
+		method="post" onsubmit="return choicesCheck(this);">
+		<input type="hidden" name="voteId" th:value="${vote.voteId}">
+
+		<!-- 다중 선택 여부 확인 -->
+		<div class="vote-choice-group" th:if="${vote.multiChoice == 'Y'}">
+			<p>다중 선택</p>
+			<div class="vote-choice" th:each="choice : ${voteChoices}">
+				<input type="checkbox" name="choices"
+					th:value="${choice.voteListId}"
+					id="choice-[[${choice.voteListId}]]" /> <label
+					th:for="'choice-' + ${choice.voteListId}"
+					th:text="${choice.choice}"></label>
+			</div>
+		</div>
+
+		<div class="vote-choice-group" th:if="${vote.multiChoice == 'N'}">
+			<p>단일 선택</p>
+			<div class="vote-choice" th:each="choice : ${voteChoices}">
+				<input type="radio" name="choices" th:value="${choice.voteListId}"
+					id="choice-[[${choice.voteListId}]]" /> <label
+					th:for="'choice-' + ${choice.voteListId}"
+					th:text="${choice.choice}"></label>
+			</div>
+		</div>
+
+		<button type="submit" class="vote-button">투표하기</button>
+	</form>
+
+	<div th:if="${result == '이미 투표하셨습니다.'}" class="vote-error">
+		<p th:text="${result}"></p>
+		<a class="vote-result-link"
+			th:href="@{/vote/{voteId}/result(voteId=${vote.voteId})}">결과 보기</a>
+	</div>
+
+
+
+	<!-- 결과 메시지 -->
+	<div th:if="${result != null and result != '이미 투표하셨습니다.'}"
+		class="vote-result">
+		<p th:text="${result}"></p>
+		<a class="vote-result-link"
+			th:href="@{/vote/{voteId}/result(voteId=${vote.voteId})}">결과 보기</a>
+	</div>
+
+	<!-- 목록 보기 버튼 - 삭제 버튼은 상단으로 옮김 -->
+	<div class="vote-list-button-container">
+		<a href="/votelist.go" class="vote-list-button">목록으로</a>
+	</div>
+
+
+</body>
+</html>

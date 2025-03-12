@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soldesk Community - 칠판</title>
+<script
+	src="http://soldeskcommunity.duckdns.org:5555/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var classId = "[[${session.login.classId}]]";
+		var userName = "[[${session.login.name}]]";
+
+		;
+
+		var socket = io.connect("http://soldeskcommunity.duckdns.org:5555", {
+			auth : {
+				classId : classId,
+				userName : userName
+			}
+		});
+
+		var paper = document.getElementById("paper");
+		var pen = paper.getContext("2d");
+
+		pen.strokeStyle = "#FFFFFF";
+		pen.lineWidth = 5;
+		var clicked = false;
+		var startX, startY;
+		var isEraser = false;
+
+		$("#userName").text(userName || "사용자");
+		$("#classId").text(classId || "정보 없음");
+
+		socket.emit("joinClass", {
+			classId : classId,
+			userName : userName
+		});
+
+		socket.on("classMembers", function(members) {
+			$("#memberList").empty();
+			if (members && members.length > 0) {
+				members.forEach(function(member) {
+					$("#memberList").append("<li>" + member + "</li>");
+				});
+				$("#memberCount").text(members.length);
+			} else {
+				$("#memberCount").text("0");
+			}
+		});
+
+		$("#colorPicker").change(function() {
+			pen.strokeStyle = $(this).val();
+			isEraser = false;
+			pen.lineWidth = 5;
+			$("#paper").removeClass("eraser-active");
+			$("#penButton").addClass("active");
+			$("#eraserButton").removeClass("active");
+
+		});
+
+		$("#eraserButton").click(function() {
+			isEraser = true;
+			pen.lineWidth = 20;
+			$("#paper").addClass("eraser-active");
+			$(this).addClass("active");
+			$("#penButton").removeClass("active");
+
+		});
+
+		$("#penButton").click(function() {
+			isEraser = false;
+			pen.strokeStyle = $("#colorPicker").val();
+			pen.lineWidth = 5;
+			$("#paper").removeClass("eraser-active");
+			$(this).addClass("active");
+			$("#eraserButton").removeClass("active");
+
+		});
+
+		// 선 그리기 함수
+		function drawLine(x1, y1, x2, y2, color, eraser, lineWidth) {
+			pen.beginPath();
+
+			var currentColor = pen.strokeStyle;
+			var currentLineWidth = pen.lineWidth;
+
+			if (eraser) {
+				pen.strokeStyle = "#303030";
+				pen.lineWidth = lineWidth || 20;
+			} else if (color) {
+				pen.strokeStyle = color;
+				pen.lineWidth = lineWidth || 5;
+			}
+
+			pen.moveTo(x1, y1);
+			pen.lineTo(x2, y2);
+			pen.stroke();
+			pen.closePath();
+
+			pen.strokeStyle = currentColor;
+			pen.lineWidth = currentLineWidth;
+		}
+
+		$("#paper").mousedown(function(e) {
+			clicked = true;
+			startX = e.pageX - this.offsetLeft;
+			startY = e.pageY - this.offsetTop;
+
+		});
+
+		$("#paper").mousemove(function(e) {
+			if (clicked) {
+				var endX = e.pageX - this.offsetLeft;
+				var endY = e.pageY - this.offsetTop;
+
+				drawLine(startX, startY, endX, endY, null, isEraser);
+
+				var data = {
+					classId : classId,
+					sx : startX,
+					sy : startY,
+					ex : endX,
+					ey : endY,
+					color : isEraser ? "#303030" : pen.strokeStyle,
+					eraser : isEraser,
+					lineWidth : pen.lineWidth
+				};
+				socket.emit("classDrawing", data);
+
+				startX = endX;
+				startY = endY;
+			}
+		});
+
+		socket.on("classDrawing", function(data) {
+
+			drawLine(data.sx, data.sy, data.ex, data.ey, data.color,
+					data.eraser, data.lineWidth);
+		});
+
+		$("#paper").mouseup(function() {
+			clicked = false;
+		});
+
+		$("#paper").mouseleave(function() {
+			clicked = false;
+		});
+
+		$("#clearButton").click(function() {
+			clearCanvas();
+
+			socket.emit("classClear", {
+				classId : classId
+			});
+
+		});
+
+		socket.on("classClear", function() {
+
+			clearCanvas();
+		});
+
+		function clearCanvas() {
+			pen.clearRect(0, 0, paper.width, paper.height);
+		}
+
+		// 초기 상태 설정
+		$("#penButton").addClass("active");
+
+	});
+</script>
+<link rel="stylesheet" href="css/index.css">
+<link rel="stylesheet" href="css/canvas.css">
+</head>
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<h1>솔데스크 공유 칠판</h1>
+
+	<div class="user-info">
+		<div>
+			<h3>
+				환영합니다, <span id="userName">사용자</span>님!
+			</h3>
+			<p>
+				반 ID: <span id="classId">정보 로딩 중...</span>
+			</p>
+		</div>
+		<div>
+			<p>실시간 공유 칠판에 참여하신 것을 환영합니다.</p>
+		</div>
+	</div>
+
+	<div class="canvas-wrapper">
+		<canvas id="paper" width="1000" height="700"></canvas>
+
+		<div class="controls-container">
+			<div class="input-container">
+				<label for="colorPicker">색상:</label> <input type="color"
+					id="colorPicker" value="#FFFFFF">
+				<button id="penButton">분필</button>
+				<button id="eraserButton">지우개</button>
+				<button id="clearButton">전체 지우기</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="participants-container">
+		<p>
+			참여자 목록 (<span id="memberCount">0</span>명)
+		</p>
+		<ul id="memberList"></ul>
+	</div>
+</body>
+</html>

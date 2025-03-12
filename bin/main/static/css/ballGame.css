@@ -1,0 +1,55 @@
+@charset "UTF-8";
+
+body{
+	background-color: #F5F6CE;
+}
+/* 게임기와 캔버스를 감싸는 컨테이너 */
+#game-container {
+	position: relative;
+	width: 1000px; /* 게임기 이미지의 너비에 맞춤 */
+	height: 1120px; /* 게임기 이미지의 높이에 맞춤 */
+	margin: auto;
+}
+
+/* 게임기 이미지 */
+#game-device {
+	display: block;
+	width: 100%; /* 게임기 이미지 크기 맞추기 */
+	height: 100%; /* 게임기 이미지 크기 맞추기 */
+}
+
+/* 캔버스를 게임기 화면 위치에 맞게 조정 */
+canvas {
+	position: absolute;
+	top: 22.8%; /* 게임기 화면 위치에 맞게 조정 */
+	left: 32%; /* 게임기 화면 위치에 맞게 조정 */
+	width: 370px; /* 캔버스 너비 */
+	height: 600px; /* 캔버스 높이 */
+	background-color: white; /* 캔버스 배경을 흰색으로 설정 */
+}
+
+h2 {
+	position: absolute;
+	left: 1200px;
+	top: 1000px;
+	font-size: 20px;
+	font-family: Arial, sans-serif;
+	color: black;
+}
+h3 {
+	position: absolute;
+    left: 1200px;
+    top: 950px;
+}
+
+#ranking {
+	position: fixed;
+	left: 1500px;
+	top: 100px;
+	font-size: 18px;
+	font-family: Arial, sans-serif;
+}
+
+#ranking ul {
+	list-style-type: none;
+}
