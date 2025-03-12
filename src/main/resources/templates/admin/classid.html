@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<script type="text/javascript" src="js/validCheck.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/move.js"></script>
+<link rel="styleSheet" href="css/admin.css">
+<meta charset="UTF-8">
+<title>classID 관리</title>
+</head>
+<body>
+	<!-- 메뉴바 -->
+	<div class="navbar">
+		<a href="/main.go">홈페이지</a>
+		<a href="/admin.user">회원 관리</a> <a href="/admin.board">게시판 관리</a> <a
+			href="/admin.notice">공지사항 관리</a> <a href="/admin.classid">반 관리</a>
+	</div>
+	<h2>Class ID 관리</h2>
+	<table border="1" class="class-table">
+		<tr>
+			<th>반아이디</th>
+			<th>반비밀번호</th>
+			<th>반캘린더아이디</th>
+			<th>삭제</th>
+		</tr>
+		<tr th:each="class : ${cls}">
+			<td th:text="${class.classId}"></td>
+			<td th:text="${class.classPw}"></td>
+			<td th:text="${class.classCalendarId}"></td>
+			<td><a class="delete-btn"
+					th:onclick="classIdDelete([[${class.classId}]])">삭제</a></td>
+		</tr>
+		<form action="/admin.classId.append" method="post"
+			onsubmit="return classIdCheck(this)">
+			<input th:value="${token}" name="token" type="hidden">
+			<tr>
+				<td><input name="classId" class="input-field" placeholder="반ID"></td>
+				<td><input name="classPw" class="input-field" placeholder="반PW"></td>
+				<td><input name="classCalendarId" class="input-field" placeholder="반Calender"></td>
+				<td><button type="submit" class="submit-btn">추가</button></td>
+			</tr>
+		</form>
+	</table>
+</body>
+
+</html>

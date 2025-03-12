@@ -1,0 +1,44 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Soldesk Community - 공지사항 글쓰기</title>
+	<link rel="stylesheet" href="css/board.css">
+	<script type="text/javascript" src="js/validCheck.js"></script>
+	<script type="text/javascript" src="js/jQuery.js"></script>
+	<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+	<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+	<script type="text/javascript" src="js/move.js"></script>
+</head>
+
+<body>
+	<form enctype="multipart/form-data" action="notice.write.do" method="post" onsubmit="return noticeWriteCheck(this)">
+		<div class="form-container">
+			<h4>글쓰기</h4>
+			<input th:value="${token}" name="token" type="hidden">
+			<div class="input-group">
+				<label class="input-label">제목</label>
+				<textarea name="noticeTitle" id="inTitle" class="form-input" placeholder="제목"
+					maxlength="100"></textarea>
+			</div>
+			<div class="input-group">
+				<label class="input-label">내용</label>
+				<textarea name="noticeContent" id="inContent" class="form-input" placeholder="내용"></textarea>
+			</div>
+			<div class="input-group">
+				<label for="noticeImageFile" class="input-label">사진 첨부 : </label>
+				<input type="file" name="noticeImageFile" id="noticeImageFile" class="file-input" />
+			</div>
+			<div class="input-group">
+				<label for="noticeFile" class="input-label">첨부 파일 : </label>
+				<input type="file" name="noticeFile" id="noticeFile" class="file-input" />
+			</div>
+			<div class="submit-btn">
+				<button type="submit" class="submit-button">글 작성</button>
+			</div>
+		</div>
+	</form>
+
+</body>
+
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Soldesk Community - 회원가입</title>
+	<link rel="styleSheet" href="css/login.css">
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript" src="js/jQuery.js"></script>
+	<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+	<script type="text/javascript" src="js/validCheck.js"></script>
+	<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+	<script>
+		// 이메일 인증 버튼 클릭 시 동적으로 인증 코드 입력란과 인증 버튼을 표시
+		function showVerificationInputs() {
+			let email = document.getElementById("email").value;
+			if (!email) {
+				alert("이메일을 입력하세요.");
+				return;
+			}
+
+			fetch(`/auth/send-code?email=${email}`, { method: "POST" })
+				.then(response => response.json())  // 응답을 JSON 형식으로 받기
+				.then(data => {
+					if (data.message) {
+						alert(data.message);  // 성공 메시지만 표시
+						document.getElementById("verification-container").style.display = "table-row";
+						// 기존 버튼은 이미 위치가 고정되어 있으므로 숨기지 않음
+					} else if (data.error) {
+						alert(`에러: ${data.error}`);  // 에러 메시지를 화면에 표시
+					} else {
+						alert(`이메일 인증 전송 실패: ${data.details || '알 수 없는 오류'}`);
+					}
+				})
+				.catch(error => {
+					console.error("이메일 인증 전송 실패:", error);
+					alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+				});
+		}
+
+		// 인증 코드 검증 (서버 API와 연동)
+		function verifyCode() {
+			let email = document.getElementById("email").value;
+			let code = document.getElementById("verification-code").value;
+
+			if (!code) {
+				alert("인증 코드를 입력하세요.");
+				return;
+			}
+
+			fetch(`/auth/verify-code?email=${email}&code=${code}`, { method: "POST" })
+				.then(response => response.json())  // 응답을 JSON 형식으로 받기
+				.then(data => {
+					if (data.message === '인증 성공') {
+						alert("인증 성공!");
+					} else if (data.error) {
+						alert(`에러: ${data.error}`);  // 인증 실패 시 에러 메시지를 화면에 표시
+					} else {
+						alert("잘못된 인증 코드입니다.");
+					}
+				})
+				.catch(error => {
+					console.error("인증 코드 검증 실패:", error);
+					alert("네트워크 오류가 발생했습니다. 다시 시도해주세요.");
+				});
+		}
+
+/* 		// 비밀번호 확인 체크
+		function checkPassword() {
+			const password = document.getElementById("pw").value;
+			const passwordConfirm = document.getElementById("pwChk").value;
+			
+			if (password !== passwordConfirm) {
+				alert("비밀번호가 일치하지 않습니다.");
+				return false;
+			}
+			return true;
+		}
+
+		// 폼 검증 함수
+		function joinCheck(this) {
+			// 기존 joinCheck 함수 내용 유지
+			// 추가로 비밀번호 확인 검증 호출
+			return checkPassword();
+		} */
+	</script>
+</head>
+
+<body>
+	<form action="/join" method="POST" enctype="multipart/form-data" onsubmit="return joinCheck(this);">
+		<a href="main.go"><img src="img/MainLogo.png" alt="로고 이미지" id="siteLogo"></a>
+		<table id="joinArea">
+			<tr>
+				<td colspan="2" align="center">
+					<h2>회원가입</h2>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<div style="position: relative;">
+						<input type="email" name="email" id="email" placeholder="이메일을 입력하세요">
+						<button id="verifyBtn" type="button" onclick="showVerificationInputs()">인증하기</button>
+					</div>
+				</td>
+			</tr>
+
+			<!-- 이메일 인증 코드 입력란과 인증 버튼 (초기에는 숨겨짐) -->
+			<tr id="verification-container" style="display: none;">
+				<td colspan="2" align="center">
+					<div style="position: relative;">
+						<input type="text" name="code" id="verification-code" placeholder="인증 코드를 입력하세요">
+						<button id="verifyBtn" type="button" onclick="verifyCode()">인증확인</button>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" align="center"><input type="text" name="name" placeholder="이름을 입력하세요"></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="password" name="pw" id="pw" placeholder="비밀번호를 입력하세요"></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<input id="pwChk" name="pwChk" maxlength="10" autocomplete="off" type="password" placeholder="비밀번호 확인"
+						class="textType">
+				</td>
+			</tr>
+			<tr id="birthRow">
+				<td align="center">
+					<select name="y">
+						<option th:each="y : ${#numbers.sequence(curYear, curYear-50, -1)}" th:text="${y}"></option>
+					</select> 년
+					<select name="m">
+						<option th:each="m : ${#numbers.sequence(1, 12)}" th:text="${m}"></option>
+					</select> 월
+					<select name="d">
+						<option th:each="d : ${#numbers.sequence(1, 31)}" th:text="${d}"></option>
+					</select> 일
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><input type="tel" name="tel" placeholder="전화번호를 입력하세요"></td>
+			</tr>
+			<tr>
+				<td align="center">
+					<input id="memberAddr1Input" readonly="readonly" name="addr1" autocomplete="off" placeholder="우편번호"
+						class="textType"><br>
+					<input id="memberAddr2Input" readonly="readonly" name="addr2" autocomplete="off" placeholder="주소"
+						class="textType">
+					<input name="addr3" autocomplete="off" placeholder="상세주소" class="textType">
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<input name="photoTemp" type="file" class="textType" style="color:#4A6AEC;">
+				</td>
+			</tr>
+			<tr>
+				<td align="center">
+					<input name="classId" maxlength="15" autocomplete="off" placeholder="반번호" class="textType"
+						id="classId">
+				</td>
+			</tr>
+
+			<tr>
+				<td align="center">
+					<input name="classPw" maxlength="15" autocomplete="off" placeholder="반 비밀번호" class="textType"
+						id="classPw">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">
+					<button id="joinButton" type="submit">회원가입</button>
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+
+</html>

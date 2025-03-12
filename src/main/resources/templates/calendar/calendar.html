@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Google Calendar API Quickstart</title>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
+	<link rel="stylesheet" href="css/calendar.css">
+	<link rel="styleSheet" href="css/index.css">
+</head>
+
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<div class="calendar-wrapper">
+		<h2 class="calendar-title">구글 캘린더 연동</h2>
+
+		<div class="btn-container">
+			<button id="authorize_button" class="cal-btn" onclick="handleAuthClick()">로그인</button>
+			<button id="signout_button" class="cal-btn" onclick="handleSignoutClick()">로그아웃</button>
+		</div>
+
+		<select id="calendar-select" class="calendar-dropdown" onchange="updateCalendarView()">
+			<option value="">캘린더를 선택하시오</option>
+		</select>
+
+		<div id="event-form" class="event-form">
+			<h3 class="event-form-title">일정 추가하기</h3>
+			<input type="text" id="event-title" class="event-input" placeholder="일정 제목">
+			<input type="datetime-local" id="event-start" class="event-input" placeholder="시작 시간">
+			<input type="datetime-local" id="event-end" class="event-input" placeholder="종료 시간">
+			<button onclick="addEvent()" class="cal-btn add-event-btn">일정 추가</button>
+		</div>
+
+		<div id="message" class="message-area"></div>
+
+		<div class="calendar-iframe-container">
+			<iframe id="calendar-iframe" class="calendar-iframe" th:src="${calendarId}" frameborder="0"
+				scrolling="no"></iframe>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		const CLIENT_ID = '1088184080364-mi9lsqv76kdteclb6dhu5qop8rtvv93q.apps.googleusercontent.com';
+		const API_KEY = 'AIzaSyCh1p1izwTFHla8Lmo3A0uG4hUGW0fyWkY';
+		const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+		const SCOPES = 'https://www.googleapis.com/auth/calendar';
+		const DEFAULT_CALENDAR = 'https://calendar.google.com/calendar/embed?src=minjong2237%40gmail.com&ctz=Asia%2FSeoul';
+
+		let tokenClient;
+		let gapiInited = false;
+		let gisInited = false;
+
+		const authorizeButton = document.getElementById('authorize_button');
+		const signoutButton = document.getElementById('signout_button');
+		const calendarSelect = document.getElementById('calendar-select');
+		const calendarIframe = document.getElementById('calendar-iframe');
+		const messageElement = document.getElementById('message');
+
+		signoutButton.style.display = 'none';
+
+		const storage = {
+			saveToken(token) {
+				localStorage.setItem('gapi_token', JSON.stringify(token));
+			},
+			loadToken() {
+				const token = localStorage.getItem('gapi_token');
+				return token ? JSON.parse(token) : null;
+			},
+			saveCalendar(calendarId) {
+				localStorage.setItem('selected_calendar', calendarId);
+			},
+			loadCalendar() {
+				return localStorage.getItem('selected_calendar') || '';
+			},
+			clearAuth() {
+				localStorage.removeItem('gapi_token');
+				localStorage.removeItem('selected_calendar');
+			}
+		};
+
+		function updateButtonsState(isLoggedIn) {
+			if (isLoggedIn) {
+				authorizeButton.style.display = 'none';
+				signoutButton.style.display = 'block';
+			} else {
+				authorizeButton.style.display = 'block';
+				signoutButton.style.display = 'none';
+				calendarSelect.innerHTML = '<option value="">캘린더를 선택하시오</option>';
+				calendarIframe.src = DEFAULT_CALENDAR;
+			}
+		}
+
+		function updateCalendarView(forceRefresh = false) {
+			const selectedCalendarId = calendarSelect.value;
+
+			if (selectedCalendarId) {
+				storage.saveCalendar(selectedCalendarId);
+				const timestamp = forceRefresh ? `&rand=${new Date().getTime()}` : '';
+				const newSrc = `https://calendar.google.com/calendar/embed?src=${encodeURIComponent(selectedCalendarId)}&ctz=Asia%2FSeoul${timestamp}`;
+
+				if (calendarIframe.src !== newSrc || forceRefresh) {
+					calendarIframe.src = newSrc;
+				}
+			}
+		}
+
+		function showMessage(message) {
+			messageElement.textContent = message;
+
+			setTimeout(() => {
+				messageElement.textContent = '';
+			}, 5000);
+		}
+
+		async function validateToken() {
+			const savedToken = storage.loadToken();
+			if (!savedToken) {
+				updateButtonsState(false);
+				return false;
+			}
+
+			try {
+				gapi.client.setToken(savedToken);
+
+				const testRequest = gapi.client.request({
+					path: 'https://www.googleapis.com/calendar/v3/users/me/calendarList',
+					method: 'GET'
+				});
+
+				const response = await new Promise((resolve, reject) => {
+					testRequest.execute(resp => {
+						if (resp.error) {
+							reject(resp.error);
+						} else {
+							resolve(resp);
+						}
+					});
+				});
+
+				updateButtonsState(true);
+				await listCalendars();
+				return true;
+			} catch (error) {
+				storage.clearAuth();
+				updateButtonsState(false);
+				return false;
+			}
+		}
+
+		window.onload = async function () {
+			try {
+				if (!gapiInited || !gisInited) {
+					const hasToken = storage.loadToken() !== null;
+					updateButtonsState(hasToken);
+					return;
+				}
+
+				await validateToken();
+			} catch (error) {
+				storage.clearAuth();
+				updateButtonsState(false);
+			}
+		};
+
+		function handleAuthClick() {
+			tokenClient.callback = async (resp) => {
+				if (resp.error !== undefined) {
+					showMessage('인증 오류: ' + resp.error);
+					updateButtonsState(false);
+					return;
+				}
+
+				try {
+					storage.saveToken(gapi.client.getToken());
+					updateButtonsState(true);
+					await listCalendars();
+					showMessage('로그인 성공!');
+				} catch (error) {
+					storage.clearAuth();
+					updateButtonsState(false);
+					showMessage('로그인 후 처리 중 오류가 발생했습니다.');
+				}
+			};
+
+			if (gapi.client.getToken() === null) {
+				tokenClient.requestAccessToken({ prompt: 'consent' });
+			} else {
+				tokenClient.requestAccessToken({ prompt: 'consent' });
+			}
+		}
+
+		function handleSignoutClick() {
+			const token = gapi.client.getToken();
+			if (token !== null) {
+				google.accounts.oauth2.revoke(token.access_token);
+				gapi.client.setToken(null);
+				storage.clearAuth();
+				updateButtonsState(false);
+				showMessage('로그아웃되었습니다.');
+			}
+		}
+
+		function gapiLoaded() {
+			gapi.load('client', async () => {
+				try {
+					await gapi.client.init({
+						apiKey: API_KEY,
+						discoveryDocs: [DISCOVERY_DOC],
+					});
+					gapiInited = true;
+					maybeEnableButtons();
+				} catch (error) {
+					showMessage('Google API 초기화 오류: ' + error.message);
+				}
+			});
+		}
+
+		function gisLoaded() {
+			tokenClient = google.accounts.oauth2.initTokenClient({
+				client_id: CLIENT_ID,
+				scope: SCOPES,
+				callback: '',
+			});
+			gisInited = true;
+			maybeEnableButtons();
+		}
+
+		function maybeEnableButtons() {
+			if (gapiInited && gisInited) {
+				validateToken().catch(error => {
+					storage.clearAuth();
+					updateButtonsState(false);
+				});
+			}
+		}
+
+		async function addEvent() {
+			const calendarId = calendarSelect.value;
+			const title = document.getElementById('event-title').value;
+			const startTime = document.getElementById('event-start').value;
+			const endTime = document.getElementById('event-end').value;
+
+			if (!calendarId) {
+				showMessage('캘린더를 선택해주세요.');
+				return;
+			}
+
+			if (!title) {
+				showMessage('일정 제목을 입력해주세요.');
+				return;
+			}
+
+			if (!startTime || !endTime) {
+				showMessage('시작 시간과 종료 시간을 모두 입력해주세요.');
+				return;
+			}
+
+			if (new Date(startTime) >= new Date(endTime)) {
+				showMessage('종료 시간은 시작 시간보다 나중이어야 합니다.');
+				return;
+			}
+
+			const event = {
+				'summary': title,
+				'start': {
+					'dateTime': new Date(startTime).toISOString(),
+					'timeZone': 'Asia/Seoul'
+				},
+				'end': {
+					'dateTime': new Date(endTime).toISOString(),
+					'timeZone': 'Asia/Seoul'
+				}
+			};
+
+			try {
+				const request = gapi.client.calendar.events.insert({
+					'calendarId': calendarId,
+					'resource': event
+				});
+
+				await request.execute();
+				showMessage('일정이 성공적으로 추가되었습니다!');
+
+				document.getElementById('event-title').value = '';
+				document.getElementById('event-start').value = '';
+				document.getElementById('event-end').value = '';
+
+				updateCalendarView(true);
+			} catch (err) {
+				showMessage('일정 추가에 실패했습니다: ' + (err.message || '알 수 없는 오류'));
+			}
+		}
+
+		async function listCalendars() {
+			try {
+				const response = await gapi.client.calendar.calendarList.list();
+				const calendars = response.result.items;
+
+				calendarSelect.innerHTML = '<option value="">캘린더를 선택하시오</option>';
+
+				calendars.forEach((calendar) => {
+					const option = document.createElement('option');
+					option.value = calendar.id;
+					option.text = calendar.summary;
+					calendarSelect.appendChild(option);
+				});
+
+				const savedCalendarId = storage.loadCalendar();
+				if (savedCalendarId) {
+					calendarSelect.value = savedCalendarId;
+					updateCalendarView();
+				}
+			} catch (err) {
+				showMessage('캘린더 목록을 불러오는데 실패했습니다.');
+			}
+		}
+	</script>
+	<script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+	<script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+</body>
+
+</html>

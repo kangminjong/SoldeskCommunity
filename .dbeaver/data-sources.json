@@ -1,0 +1,42 @@
+{
+	"folders": {},
+	"connections": {
+		"oracle_thin-1956108435e-675b5e47f5e34e3b": {
+			"provider": "oracle",
+			"driver": "oracle_thin",
+			"name": "soldeskcommunity.duckdns.org",
+			"save-password": true,
+			"configuration": {
+				"host": "soldeskcommunity.duckdns.org",
+				"port": "1555",
+				"database": "XE",
+				"url": "jdbc:oracle:thin:@//soldeskcommunity.duckdns.org:1555/XE",
+				"configurationType": "MANUAL",
+				"home": "C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"provider-properties": {
+					"@dbeaver-connection-type@": "BASIC",
+					"@dbeaver-sid-service@": "SERVICE"
+				},
+				"auth-model": "oracle_native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}

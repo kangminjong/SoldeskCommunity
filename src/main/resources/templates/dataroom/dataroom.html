@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Community - 데이터 룸</title>
+<link rel="stylesheet" href="css/dataroom.css">
+<link rel="styleSheet" href="css/index.css">
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+<script type="text/javascript" src="js/ungmanValidChecker_v1.0.js"></script>
+<script type="text/javascript" src="js/move.js"></script>
+<script type="text/javascript" src="js/validCheck.js"></script>
+</head>
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<h1 align="center">데이터 룸</h1>
+	<div class="dataroomALl" align="center">
+	<table id="dataroomArea">
+		<tr>
+			<td class="cateTh"><img src="img/book.png"></td>
+			<td class="cateTh"><img src="img/code.png"></td>  
+			<td class="cateTh"><img src="img/apps.png"></td>
+			<td class="cateTh"><img src="img/attachment.png"></td>
+		</tr>
+		<tr>
+			<td class="cateTd">
+				<div class="cateTdDiv">
+					<table th:if="${gs != null}" th:each="f : ${gs}" class="aFile" th:ondblclick="dataroomFileDownload([[${f.file}]]);">
+						<tr>
+							<td class="td1">
+								<img th:if="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/zip.png">
+								<img th:unless="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/file.png">
+							</td>
+							<td th:text="${f.title}"></td>
+							<td class="td3" th:if="${f.userEmail == session.login.email}">
+								<img src="img/deleteBlack.png" th:onclick="dataroomFileDelete([[${f.no}]]);">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td class="cateTd">
+				<div class="cateTdDiv">
+					<table th:if="${ys != null}" th:each="f : ${ys}" class="aFile" th:ondblclick="dataroomFileDownload([[${f.file}]]);">
+						<tr>
+							<td class="td1">
+								<img th:if="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/zip.png">
+								<img th:unless="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/file.png">
+							</td>
+							<td th:text="${f.title}"></td>
+							<td class="td3" th:if="${f.userEmail == session.login.email}">
+								<img src="img/deleteBlack.png" th:onclick="dataroomFileDelete([[${f.no}]]);">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td class="cateTd">
+				<div class="cateTdDiv">
+					<table th:if="${ps != null}" th:each="f : ${ps}" class="aFile" th:ondblclick="dataroomFileDownload([[${f.file}]]);">
+						<tr>
+							<td class="td1">
+								<img th:if="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/zip.png">
+								<img th:unless="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/file.png">
+							</td>
+							<td th:text="${f.title}"></td>
+							<td class="td3" th:if="${f.userEmail == session.login.email}">
+								<img src="img/deleteBlack.png" th:onclick="dataroomFileDelete([[${f.no}]]);">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td class="cateTd">
+				<div class="cateTdDiv">
+					<table th:if="${es != null}" th:each="f : ${es}" class="aFile" th:ondblclick="dataroomFileDownload([[${f.file}]]);">
+						<tr>
+							<td class="td1">
+								<img th:if="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/zip.png">
+								<img th:unless="${#strings.endsWith(f.file, 'zip') || #strings.endsWith(f.file, 'alz') || #strings.endsWith(f.file, 'egg') || #strings.endsWith(f.file, 'gz') || #strings.endsWith(f.file, 'bz2')}" src="img/file.png">
+							</td>
+							<td th:text="${f.title}"></td>
+							<td class="td3" th:if="${f.userEmail == session.login.email}">
+								<img src="img/deleteBlack.png" th:onclick="dataroomFileDelete([[${f.no}]]);">
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+		</tr>
+	</table>
+	
+	<table id="dataroomControlArea">
+		<tr>
+			<td align="center">
+				<form action="dataroom.file.upload" 
+					method="post" enctype="multipart/form-data"
+					onsubmit="return dataroomFileUploadCheck(this);">
+					<table id="snsWriteTbl">
+						<tr>
+							<td>
+								<input name="title" id="dataroomUploadTitleInput"
+									maxlength="40" 
+									placeholder="제목" autocomplete="off">
+							</td>
+							<td rowspan="3"><input id="snsWriteBtn" type="image" src="img/upload.png"></td>
+						</tr>
+						<tr><td><input th:value = "${token}" name = "token" type="hidden"></td><</tr>
+						<tr>
+							<td>
+								<input type="radio" name="category" value="g" checked="checked">교재&nbsp;
+								<input type="radio" name="category" value="y">예제&nbsp;
+								<input type="radio" name="category" value="p">프로그램&nbsp;
+								<input type="radio" name="category" value="e">기타
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input type="file" name="fileTemp" id="dataroomUploadFileInput">
+							</td>
+						</tr>
+					</table>
+				</form>
+			</td>
+		</tr>
+	</table>
+	</div>
+		
+</body>
+</html>

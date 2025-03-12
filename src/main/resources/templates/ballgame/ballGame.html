@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Brick Breaker Game</title>
+<script type="text/javascript" src="js/ungman_jQuery.js"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<link rel="styleSheet" href="css/index.css">
+<link rel="styleSheet" href="css/ballGame.css">
+<script type="text/javascript">
+    $(function() {
+        var paper = document.getElementById("paper");
+        var pen = paper.getContext("2d");
+
+        var gameDevice = new Image();
+        gameDevice.src = "img/game.png"; // 게임기 이미지 경로
+
+        var ball = new Image();
+        ball.src = "/img/ball.png"; // 공 이미지 경로
+
+        var score = 0;
+        var playerName = prompt("게임을 시작하기 전에 이름을 입력해주세요.");
+
+        // 이름 중복 체크 후 게임 시작
+        async function checkNameAndStartGame() {
+            while (playerName === null || await isNameDuplicate(playerName)) {
+                if (playerName === null) {
+                    location.href = "/main.go"; // 취소하면 페이지 리로드
+                    return;
+                }
+                playerName = prompt("이미 있는 이름입니다. 다른 이름을 입력해주세요.");
+            }
+
+            startGame(); // 중복되지 않으면 게임 시작
+        }
+
+        checkNameAndStartGame();
+
+        var x = 135, y = 185;
+        var xSpd = 0, ySpd = 0;
+        var barX = 100;
+        var gameStarted = false;
+        var gameInterval;
+        var gameEnded = false; // 게임 종료 여부를 추적하는 플래그
+
+        // 게임기 이미지 로딩 후 캔버스 크기 조정
+        gameDevice.onload = function() {
+            // 게임기 화면 크기(416x666)에 맞게 캔버스 크기 설정
+            paper.width = 416;
+            paper.height = 666;
+
+            // 캔버스 배경을 흰색으로 설정
+            pen.fillStyle = "white";
+            pen.fillRect(0, 0, paper.width, paper.height);
+
+            ball.onload = function() {
+                startGame();
+            };
+        };
+
+        function startGame() {
+            score = 0;
+            x = 135;
+            y = 185;
+            xSpd = 0;
+            ySpd = 0;
+            barX = 100;
+            gameStarted = false;
+            gameEnded = false; // 게임이 시작되면 종료되지 않도록 초기화
+
+            gameInterval = setInterval(function() {
+            	if (gameEnded) {
+                    return; // 게임이 종료되면 점수 갱신과 그 외의 게임 로직을 진행하지 않음
+                }
+                $("h2").text("점수: " + score);
+                pen.clearRect(0, 0, paper.width, paper.height);
+
+                // 배경을 계속 흰색으로 설정 (게임 진행 중에도)
+                pen.fillStyle = "white";
+                pen.fillRect(0, 0, paper.width, paper.height);
+
+                if (x >= paper.width - 30 || x <= 0) {
+                    xSpd *= -1;
+                }
+
+                if (y >= paper.height - 30 && !gameEnded) { // 게임 종료 시 한 번만 실행되도록 체크
+                    gameEnded = true; // 게임 종료 상태로 설정
+                    saveScore(score, playerName);
+                    alert(playerName + "님, 패배! 총 점수: " + score);
+                    clearInterval(gameInterval);
+                    updateRanking();
+
+                    // "다시 게임을 시작하시겠습니까?" 확인창 표시
+                    if (confirm("다시 게임을 시작하시겠습니까?")) {
+                        startGame(); // 게임 다시 시작
+                    } else {
+                        alert("게임이 종료되었습니다.");
+                        updateRanking(); // 순위만 업데이트
+                    }
+                }
+
+                if (y <= 0) {
+                    ySpd *= -1;
+                }
+
+                if (y >= paper.height - 45 && x >= barX - 15 && x <= barX + 85) {
+                    ySpd *= -1;
+                    score++;
+                    $("h3").text("튕");
+                    setTimeout(function() {
+                        $("h3").text(""); // 1초 후에 텍스트를 빈 문자열로 변경
+                    }, 1000);
+                }
+
+                if (gameStarted) {
+                    x += xSpd;
+                    y += ySpd;
+                }
+
+                pen.drawImage(ball, x, y, 30, 30);
+                pen.fillStyle = "red";
+                pen.fillRect(barX, paper.height - 15, 100, 15);
+            }, 20);
+        }
+
+        $("canvas").mousemove(function(e) {
+            var canvasX = $("canvas").offset().left;
+            barX = e.pageX - canvasX - 50;
+            if (barX < 0) barX = 0;
+            if (barX > paper.width - 100) barX = paper.width - 100;
+        });
+
+        $(document).keydown(function(e) {
+            if (e.key === " " && !gameStarted) {
+                xSpd = 6;
+                ySpd = 6;
+                gameStarted = true;
+            }
+        });
+
+        function saveScore(newScore, playerName) {
+            $.ajax({
+                url : '/saveScore',
+                method : 'POST',
+                data : { playerName : playerName, score : newScore },
+                success : function() {
+                    console.log("점수가 저장되었습니다.");
+                    updateRanking();
+                }
+            });
+        }
+
+        function updateRanking() {
+            $.ajax({
+                url : '/topScores',
+                method : 'GET',
+                success : function(data) {
+                    var rankingHtml = "<h1>순위</h1><ul>";
+                    data.forEach(function(score, index) {
+                        rankingHtml += "<li>" + (index + 1) + "등: " + score.playerName + " - " + score.score + "점</li>";
+                    });
+                    rankingHtml += "</ul>"; 
+                    $("#ranking").html(rankingHtml);
+                }
+            });
+        }
+
+        updateRanking();
+    });
+
+    // 이름 중복 체크하는 비동기 함수
+    function isNameDuplicate(playerName) {
+        return $.ajax({
+            url: '/checkNameDuplicate',
+            method: 'POST',
+            data: { playerName: playerName },
+            dataType: 'text',  // 응답을 텍스트 형식으로 받기
+        }).then(function(response) {
+            return response === 'true'; // 응답이 'true'이면 중복된 이름
+        }).catch(function() {
+            console.error("중복 확인 중 오류가 발생했습니다.");
+            return false;  // 오류 발생 시 false 반환
+        });
+    }
+</script>
+</head>
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+	<h1 align="center">스페이스바를 누르면 게임이 시작됩니다!^^</h1>
+	<div id="game-container">
+		<img id="game-device" src="img/game.png" alt="게임기">
+		<canvas id="paper" width="416" height="670"></canvas>
+	</div>
+	<h2></h2>
+	<h3></h3>
+	<div id="ranking"></div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<link rel="styleSheet" href="css/find.css">
+<head>
+    <meta charset="UTF-8">
+    <title>Soldesk Community - 비밀번호 재설정</title>
+    <script>
+        // 비밀번호 확인 확인
+        function checkPasswordMatch() {
+            var password = document.getElementById("new-password").value;
+            var confirmPassword = document.getElementById("confirm-password").value;
+			
+			if (!password) {
+				alert("비밀번호을 입력하세요.");
+				return false;
+			}
+            if (password !== confirmPassword) {    
+                alert("비밀번호가 일치하지 않습니다");
+                return false;
+            } else {
+                document.getElementById("result").innerHTML = "";
+                return true;
+            }  
+        }
+    </script>
+</head>
+<body>
+<form action="repw.do" method="post" onsubmit="return checkPasswordMatch()">
+    <table class="password-reset-table">
+        <tr>
+            <td colspan="2">
+                <h2 align="center">비밀번호 재설정</h2>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p align="center">새로운 비밀번호를 입력해주세요.</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input name="email" th:value="${email}" type="hidden">
+            </td>
+        </tr>
+        <tr>
+            <td>새 비밀번호</td>
+            <td><input name="pw" type="password" id="new-password" placeholder="새 비밀번호"></td>
+        </tr>
+        <tr align="center">
+            <td>비밀번호 확인</td>
+            <td><input name="pwChk" type="password" id="confirm-password" placeholder="비밀번호 확인"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button type="submit">비밀번호 재설정</button>
+            </td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

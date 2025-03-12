@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Soldesk Community - 오시는 길</title>
+<link rel="styleSheet" href="css/index.css">
+<script type="text/javascript"
+   src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=075252d4e5733057056e23d8f2f6a964&libraries=services,clusterer,drawing"></script>
+<script type="text/javascript" src="js/jQuery.js"></script>
+<script type="text/javascript">
+   var map = null;
+   var marker = null;
+   var roadview = null;
+   var roadviewClient = new kakao.maps.RoadviewClient();
+   
+   $(function() {
+	    var jongnoLat = 37.5693659, jongnoLng = 126.9860469; // 종로 좌표
+	    var gangnamLat = 37.5054299, gangnamLng = 127.0266935; // 강남 좌표
+
+	    var container = document.getElementById('map');
+	    var roadviewContainer = document.getElementById('roadview');
+	    var ll = new kakao.maps.LatLng(jongnoLat, jongnoLng); // 초기값 종로
+
+	    map = new kakao.maps.Map(container, { level: 3, center: ll });
+	    marker = new kakao.maps.Marker({ position: ll, map: map });
+	    roadview = new kakao.maps.Roadview(roadviewContainer);
+	    roadviewClient.getNearestPanoId(ll, 50, function(panoId) {
+	        roadview.setPanoId(panoId, ll);
+	    });
+
+	    $('#academySelect').change(function() {
+	        var selected = $(this).val();
+	        if (selected === 'jongno') {
+	            $('#Jong').show();
+	            $('#Gang').hide();
+	            moveMap(jongnoLat, jongnoLng); // 종로로 이동
+	        } else if (selected === 'gangnam') {
+	            $('#Jong').hide();
+	            $('#Gang').show();
+	            moveMap(gangnamLat, gangnamLng); // 강남으로 이동
+	        }
+	    });
+
+	    $('#Gang').hide();
+	});
+
+	function moveMap(lat, lng) {
+	    var ll = new kakao.maps.LatLng(lat, lng);
+	    map.setCenter(ll);
+	    marker.setPosition(ll);
+	    roadviewClient.getNearestPanoId(ll, 50, function(panoId) {
+	        roadview.setPanoId(panoId, ll);
+	    });
+	}
+</script>
+
+<style type="text/css">
+#mapArea {
+   width: 80%;
+   margin: auto ;
+   background-color: #FFFFFFCC;
+   border: #0056b3 solid 7px;
+   border-radius: 7px;
+   margin-top: 100px;
+   margin-bottom: 30px;
+}
+
+#map, #roadview {
+   width: 96%;
+   height: 400px;
+   border-radius: 7px;
+}
+
+#flex{
+   display: flex;   
+}
+
+.aLoc {
+   width: 30%;
+   height:120px;
+   float: left;
+   margin-left: 33px;
+   margin-top: 20px;
+   cursor: pointer;
+   border:#0056b3 solid 5px;
+}
+
+.aLocName {
+   background-color: #007bff;
+   color:white;
+   height:25px;
+   font-size: 13pt;
+   padding: 7px;
+}
+.aLocAddr{
+   background-color: #007bff;
+   height: 30px;
+   font-size: 11pt;
+   padding: 2px;
+   color: #212121;
+}
+.aLocPhone{
+   background-color: #007bff;
+   font-size: 10pt;
+   padding: 5px;
+   color: #212121;
+}
+
+#SolResult {
+    margin-top: -100px;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    width: 120%; /* 수평으로 더 길게 */
+    height: 500px; /* 수직으로 더 길게 */
+    position: relative;
+    left: -10%; /* 왼쪽으로 10%만큼 이동하여 가운데 맞추기 */
+}
+
+
+
+#SolResult table {
+    border: 3px solid #0056b3;
+    text-align: center;
+    margin: 10px;
+    border-radius: 10px; /* 모서리 둥글게 */
+}
+
+#academy {
+   display: flex;
+    justify-content: flex-end;  
+    margin-right: 70px;
+}
+
+label {
+   margin: 2px;
+}
+
+.aLoc td{
+   color: white;
+}
+
+/* Label 디자인 */
+label[for="academySelect"] {
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+    margin-top: 8px;
+}
+
+/* Select 박스 디자인 */
+#academySelect {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: 2px solid #0056b3;
+    border-radius: 5px;
+    background-color: #ffffff;
+    color: #333;
+    font-weight: 500;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Select 박스에 포커스 시 디자인 */
+#academySelect:focus {
+    outline: none;
+    border-color: #00408a;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.3);
+}
+
+/* Option 스타일 */
+#academySelect option {
+    padding: 8px;
+    background-color: #ffffff;
+    color: #333;
+}
+
+/* Option 선택 시 스타일 */
+#academySelect option:hover {
+    background-color: #f0f0f0;
+}
+
+</style>
+</head>
+
+<body>
+	<div id="menu" th:insert="~{${menuPage}}">메뉴들</div>
+   <h1 align="center">오시는 길</h1>
+   <div id="academy">
+      <label for="academySelect">학원 선택</label>
+      <select id="academySelect">         
+         <option value="jongno">종로</option>
+         <option value="gangnam">강남</option>
+      </select>
+   </div>
+   <div id="mapArea">
+      <div id="flex">
+         <div id="map"></div>
+         <div id="roadview"></div>
+      </div>
+      <!--<input id="locSearch" placeholder="위치" autocomplete="off">
+      <input id="search" placeholder="뭐" autocomplete="off">   -->
+   </div>
+   <div id="SolResult">
+      <table class="aLoc" id="Jong">
+         <tr>
+            <td class="aLocName">솔데스크 종로본점</td>
+            <td class="aLocAddr">서울특별시 종로구 종로12길 15 5층 (관철동 13-13)</td>
+            <td class="aLocPhone">1544-0714</td>
+         </tr>
+      </table>
+      <table class="aLoc" id="Gang">
+         <tr>
+            <td class="aLocName">솔데스크 강남</td>
+            <td class="aLocAddr">서울특별시 강남구 봉은사로 119 성옥빌딩 5층, 6층</td>
+            <td class="aLocPhone">1544-0714</td>
+         </tr>
+      </table>
+   </div>
+</body>
+</html>
